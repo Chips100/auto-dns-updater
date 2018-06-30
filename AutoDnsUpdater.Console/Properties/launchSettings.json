@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AutoDnsUpdater.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "keepopen"
+    }
+  }
+}

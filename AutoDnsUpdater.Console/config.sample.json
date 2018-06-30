@@ -1,0 +1,8 @@
+﻿{
+  "EinsUndEinsUpdateDnsEntryUrl": "URL to POST the DNS entry change to.",
+  "EinsUndEinsDnsEntryTtl": "Time to live for the DNS entry in seconds. (only certain values are supported by 1&1; i.e. 3600 and 7200).",
+  "EinsUndEinsCookie": "Cookie for Authenticating the POST request.",
+  "EinsUndEinsUserAgent": "User Agent (1&1 needs this).",
+  "ICanHazIpUrl": "http://icanhazip.com",
+  "LogFile": "Log.txt"
+}
