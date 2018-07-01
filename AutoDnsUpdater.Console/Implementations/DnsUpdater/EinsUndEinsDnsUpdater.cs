@@ -41,7 +41,7 @@ namespace AutoDnsUpdater.Console.Implementations.DnsUpdater
                 var httpContent = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     { "__sendingdata", "1" },
-                    { "record.forWwwSubdomain", "false" },
+                    { "record.forWwwSubdomain", "true" },
                     { "record.value", ipAddress.ToString() },
                     { "record.ttl", _configuration.GetString("EinsUndEinsDnsEntryTtl") }
                 });
