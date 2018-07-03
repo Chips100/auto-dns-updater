@@ -1,7 +1,9 @@
 # auto-dns-updater
 [![Build Status](https://travis-ci.com/Chips100/auto-dns-updater.svg?branch=master)](https://travis-ci.com/Chips100/auto-dns-updater)
 
-Allows automatic updating of a DNS entry to point to the current machine. This is a simplistic implementation to fit my personal needs - it sets the DNS entry in my 1&1 Hosting Account configuration to point to my Raspberry PI.
+Allows automatic updating of a DNS entry to point to the current machine. This is a simplistic implementation to fit my personal needs - it sets the DNS entries in my FreeDNS Account configuration to point to my Raspberry PI. 
+
+**Short note on the history**: This tool started with the intent to target my 1&1 Hosting configuraton, but the underlying idea was flawed - so I switched to FreeDNS. Most home-use routers could update FreeDNS out of the box, but being the responsible developer that I am, I did not want to give up my approach and continued using this tool.
 
 ## Installation on Raspberry PI 3
 ### Compiling
