@@ -14,7 +14,7 @@ namespace AutoDnsUpdater.Console
         private static readonly IConfiguration _configuration = new JsonFileConfiguration("config.json");
         private static readonly ILogger _logger = new CompositeLogger(new ILogger[] { new FileBasedLogger(_configuration), new ConsoleLogger() });
         private static readonly IIPAddressResolver _ipAddressResolver = new ICanHazIpIPAddressResolver(_configuration, _logger);
-        private static readonly IDnsUpdater _dnsUpdater = new EinsUndEinsDnsUpdater(_configuration, _logger);
+        private static readonly IDnsUpdater _dnsUpdater = new FreeDNSDnsUpdater(_configuration, _logger);
 
         static void Main(string[] args)
         {

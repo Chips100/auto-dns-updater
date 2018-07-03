@@ -7,22 +7,20 @@ using System.Threading.Tasks;
 namespace AutoDnsUpdater.Console.Implementations.DnsUpdater
 {
     /// <summary>
-    /// Updates DNS entries in the 1&1 hosting configuration by calling
+    /// Updates DNS entries in the FreeDNS configuration by calling
     /// the Web endpoint for managing a domain's DNS entries.
     /// </summary>
-    [Obsolete("Updating DNS entries for the 1&1 Web Servers does not work well, because" +
-        "DNS servers may ignore TTLs and cache entries longer than the current IP is maintained.", true)]
-    public sealed class EinsUndEinsDnsUpdater : IDnsUpdater
+    public sealed class FreeDNSDnsUpdater : IDnsUpdater
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
 
         /// <summary>
-        /// Creates an EinsUndEinsDnsUpdater.
+        /// Creates a FreeDNSDnsUpdater.
         /// </summary>
         /// <param name="configuration">Configuration source.</param>
         /// <param name="logger">Logger for writing log messages.</param>
-        public EinsUndEinsDnsUpdater(IConfiguration configuration, ILogger logger)
+        public FreeDNSDnsUpdater(IConfiguration configuration, ILogger logger)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -40,29 +38,40 @@ namespace AutoDnsUpdater.Console.Implementations.DnsUpdater
             using (var client = new HttpClient())
             {
                 // Set HTTP POST body content.
-                var httpContent = new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    { "__sendingdata", "1" },
-                    { "record.forWwwSubdomain", "true" },
-                    { "record.value", ipAddress.ToString() },
-                    { "record.ttl", _configuration.GetString("EinsUndEinsDnsEntryTtl") }
-                });
+                var httpContent = new FormUrlEncodedContent(
+                    GetPostBodyValues(_configuration.GetInt32Array("FreeDNSUpdateDnsEntryIds"), ipAddress));
 
                 // Set headers for request.
-                httpContent.Headers.Add("Cookie", _configuration.GetString("EinsUndEinsCookie"));
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(_configuration.GetString("EinsUndEinsUserAgent"));
+                httpContent.Headers.Add("Cookie", _configuration.GetString("FreeDNSCookie"));
 
                 // Send request.
-                _logger.Write("Trying to change DNS entry by 1&1 Web App.");
-                var response = await client.PostAsync(_configuration.GetString("EinsUndEinsUpdateDnsEntryUrl"), httpContent);
-
+                _logger.Write("Trying to change DNS entry by FreeDNS Web App.");
+                var response = await client.PostAsync(_configuration.GetString("FreeDNSUpdateDnsEntryUrl"), httpContent);
+                
                 _logger.Write(await GetLogTextForResponse(response));
                 response.EnsureSuccessStatusCode();
             }
         }
 
+        private IEnumerable<KeyValuePair<string, string>> GetPostBodyValues(int[] dnsEntryIds, IPAddress ipAddress)
+        {
+            yield return bodyValue("action", "execute");
+            yield return bodyValue("type", "A");
+            yield return bodyValue("dst", ipAddress.ToString());
+
+            //Add ID values as Array in Form Content.
+            foreach (var id in dnsEntryIds)
+            {
+                yield return bodyValue("dataset[]", id.ToString());
+            }
+
+            // Shortcut for creating KeyValuePairs.
+            KeyValuePair<string, string> bodyValue(string key, string value) 
+                => new KeyValuePair<string, string>(key, value);
+        }
+
         private async Task<string> GetLogTextForResponse(HttpResponseMessage response) =>
-            $"Response from 1&1 Web App: {response.StatusCode} - {response.ReasonPhrase}" +
+            $"Response from FreeDNS Web App: {response.StatusCode} - {response.ReasonPhrase}" +
                 // Only include full response body if unsuccessful.
                 (response.IsSuccessStatusCode ? string.Empty : Environment.NewLine + await response.Content.ReadAsStringAsync());
     }

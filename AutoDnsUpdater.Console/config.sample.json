@@ -3,6 +3,12 @@
   "EinsUndEinsDnsEntryTtl": "Time to live for the DNS entry in seconds. (only certain values are supported by 1&1; i.e. 3600 and 7200).",
   "EinsUndEinsCookie": "Cookie for Authenticating the POST request.",
   "EinsUndEinsUserAgent": "User Agent (1&1 needs this).",
+  
+  "FreeDNSUpdateDnsEntryUrl": "http://freedns.afraid.org/massmod/index.php",
+  "FreeDNSUpdateDnsEntryIds": [1, 2, 3],
+  "FreeDNSCookie": "Cookie for Authenticating the POST request.",
+
   "ICanHazIpUrl": "http://icanhazip.com",
+  
   "LogFile": "Log.txt"
 }
